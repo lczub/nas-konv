@@ -1,0 +1,8 @@
+# Vom Repository zu ignorierende Dateien
+
+# NAS Testdateien
+data/*.xml
+
+# Eclipse Projektkonfiguration
+/.settings
+/.project

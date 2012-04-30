@@ -1,0 +1,5 @@
+﻿*.xml
+xslt\*.xsl
+LICENSE.txt
+README
+*\README

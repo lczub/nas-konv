@@ -34,15 +34,25 @@
 	       Aufnahmepunkten (AX_Aufnahmepunkt) -> HTML
 	 aus NAS Dateien, Stand GeoInfoDok Version 6.0
 
-	 Verwendet nur XSLT 1.0 Elemente, kann somit direkt durch Firefox/IE 
-	 verarbeitet werden. 
+	 Verwendet im Template "adv:AX_Aufnahmepunkt|adv:AX_Sicherungspunkt" den 
+	 erst ab XSLT 1.1 nutzbaren XPath Aufruf 'select="$ap_info/info"'.
+	 Somit kann dieses Stylesheet nicht direkt von Web Browsern verwendet
+	 werden, da diese nur XSLT 1.0 Elemente kennen. XSLT 1.1 (Saxon 6.5.5) oder 
+	 XSLT 2.0 Parser (Saxon HE) können es direkt verwenden.
 	 
+	 Web Browser müssen ein Stylesheet vorschalten, das das Template 
+	     "adv:AX_Aufnahmepunkt|adv:AX_Sicherungspunkt"
+	 mit einer proprietären, Browser spezifischen Erweiterung überdefiniert.
+	 - z.B. exsl:node-set() für Firefox oder msxsl:node-set() für IE
+	 - Beispiel siehe nasconv_aufnahmepunkte_exsl.xsl. 
+	 - siehe auch NASKONV Ticket 1 - https://github.com/lczub/nas-konv/issues/1
+
 	 In den Kommentaren der Datei nasconv_general.xsl ist beschrieben, in
 	 welcher XML-Struktur die Liste der zu durchsuchenden NAS-Dateien 
 	 übergeben werden muss.
 	 ******************************************************************** -->
 
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.1" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/6.0" 
 	xmlns:gml="http://www.opengis.net/gml/3.2"
@@ -100,7 +110,9 @@
  	 ========================================================== -->
 
 <xsl:template match="/adv:*">
-	<!-- Ausgabe HTML Tabellenblock mit Suche nach AX_Aufnahmepunkt Sätzen -->
+	<!-- Ausgabe HTML Tabellenblock mit Suche nach AX_Aufnahmepunkt Sätzen 
+	     ACHTUNG: verwendet den erst ab XSLT 1.1 nutzbaren XPath Aufruf 
+	     'select="$ap_info/info"'. -->
 
 	<h3>Liste der Aufnahmepunkte</h3>
 	<table border="1">

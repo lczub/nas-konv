@@ -59,10 +59,10 @@
 	<!-- Musterdaten , die die GeoInfoDok 6.0.0 referenzieren -->
 	<nas_file name="data/ALKIS-Beispieldaten-SH-Seth-alles.xml"/>
 	<nas_file name="data/ALKIS-Beispieldaten-SH-Glueckstadt-Punkte.xml"/>
-	<nas_file name="data/lurchingen_0.4.xml"/> -->
+	<nas_file name="data/lurchingen_0.4.xml"/>
  	<nas_file name="data/20090106_ALKIS_doeteberg.xml"/>	
 	<nas_file name="data/NBA-Mustermonzel_20100520T144438_2von8_32350000_5525000.xml"/>
 	<nas_file name="data/NBA-Mustermonzel_20100520T144438_4von8_32350000_5530000.xml"/>
- 	<nas_file name="data/Bestandsdatenauszug.xml"/>  -->	
+ 	<nas_file name="data/Bestandsdatenauszug.xml"/>
 
 </nas_files>

@@ -76,8 +76,7 @@
 				<!-- Ausgabe der einzelnen AX_Flurstueck Datensaetze -->
 				<xsl:apply-templates select="current-group()" mode="html">
 					<!--  Sortierung der Flurstuecke nach Gemarkung und Flur -->
-					<xsl:sort select="adv:flurstuecksnummer/*/adv:zaehler"/>			 
-					<xsl:sort select="adv:flurstuecksnummer/*/adv:nenner"/>			 
+					<xsl:sort select="adv:flurstueckskennzeichen"/>			 
 				</xsl:apply-templates>
 				
 	    	</table>

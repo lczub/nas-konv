@@ -343,10 +343,7 @@
 		<!-- Ausgabe der einzelnen AX_Flurstuecke -->
 		<xsl:apply-templates select="//adv:AX_Flurstueck" mode="html"> 
 			<!--  Sortierung der Flurstuecke nach Gemarkung, Flur, Flstnr -->
-			<xsl:sort select="adv:gemarkung/*/adv:gemarkungsnummer"/>			 
-			<xsl:sort select="adv:flurnummer"/>			 
-			<xsl:sort select="adv:flurstuecksnummer/*/adv:zaehler"/>			 
-			<xsl:sort select="adv:flurstuecksnummer/*/adv:nenner"/>			 
+			<xsl:sort select="adv:flurstueckskennzeichen"/>			 
 		</xsl:apply-templates>
 						
 	<!--  Ende Flurstückstabelle -->

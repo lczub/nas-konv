@@ -74,7 +74,7 @@
 				<xsl:call-template name="def-tabelle-flst"/>
 			
 				<!-- Ausgabe der einzelnen AX_Flurstueck Datensaetze -->
-				<xsl:apply-templates select="current-group()">
+				<xsl:apply-templates select="current-group()" mode="html">
 					<!--  Sortierung der Flurstuecke nach Gemarkung und Flur -->
 					<xsl:sort select="adv:flurstuecksnummer/*/adv:zaehler"/>			 
 					<xsl:sort select="adv:flurstuecksnummer/*/adv:nenner"/>			 

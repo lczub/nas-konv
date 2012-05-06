@@ -57,53 +57,10 @@
 	xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/6.0" 
 	xmlns:gml="http://www.opengis.net/gml/3.2"
 	xmlns:xlink="http://www.w3.org/1999/xlink">
+<!-- Regeln Erzeugung temp. Infobäume mit Aufnahmepunktdaten einbinden -->	
+<xsl:import href="info_aufnahmepunkte.xsl"/>
 <!-- Allgemeine Regeln und Lesen nas_file Struktur einbinden -->
 <xsl:import href="nasconv_general.xsl"/>	
-
-<!-- =======================================================================
-	 Templates zum Aufbau der temp. XML Struktur mit Infos zu Aufnahmepunkte 
- 	 ======================================================================= -->
-
-<xsl:template match="adv:AX_Aufnahmepunkt|adv:AX_Sicherungspunkt" mode="info">
-	<!-- Infobaum mit Sachdaten zu AX_Aufnahmepunkt oder AX_Sicherungspunkt
-		 und zugehörigen Punktorten -->
-	<xsl:variable name="objid"><xsl:value-of select="gml:identifier"/></xsl:variable>
-	<info>
-		<xsl:attribute name="class">
-			<xsl:value-of select="local-name()"/>
-		</xsl:attribute>
-        <xsl:attribute name="Punktkennung">
-        	<xsl:value-of select="adv:punktkennung"/>
-        </xsl:attribute>
-        <xsl:attribute name="Stelle">
-        	<xsl:value-of select="adv:zustaendigeStelle/*/adv:land"/> -	<xsl:value-of select="adv:zustaendigeStelle/*/adv:stelle"/>
-        </xsl:attribute>
-        <xsl:attribute name="Vermarkung">
-        	<xsl:value-of select="adv:vermarkung_Marke"/>
-        </xsl:attribute>
-        <xsl:attribute name="Identifier">
-        	<xsl:value-of select="$objid"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="//adv:*[adv:istTeilVon/@xlink:href=$objid]" mode="info"/>
-	</info>
-</xsl:template>
-
-<xsl:template match="adv:AX_PunktortAU" mode="info">
-	<!-- Infobaum mit Koordinaten und Bezugsystem eines AX_PunktortAU -->
-	
-	<info>
-		<xsl:attribute name="class">
-			<xsl:value-of select="local-name()"/>
-		</xsl:attribute>
-		<xsl:attribute name="Position">
-			<xsl:value-of select="adv:position/gml:Point/gml:pos"/>
-        </xsl:attribute>
-        <xsl:attribute name="Bezugssystem">
-			<xsl:value-of select="adv:position//@srsName[1]"/>
-        </xsl:attribute>
-	</info>
-	
-</xsl:template>
 
 <!-- ==========================================================
 	 HTML spezifische Templates zur Ausgabe von Aufnahmepunkten

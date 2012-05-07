@@ -30,18 +30,32 @@
      ******************************************************************** --> 
 
 <!-- ******************************************************************** 
-	 Das Öffnen dieser XML Datei in einem Web Browser (Firefox / IE) 
-	 bewirkt, dass aus den im Block <nas_files> aufgeführten NAS Dateien 
-	 Informationen extrahiert werden. 
-	 Die Regeln, welche Informationen extrahiert werden sollen, sind in 
-	 der in XML-STYLESHEET referenzierte XSL Datei definiert.
-	 ******************************************************************** -->
-	 
-<!-- ******************************************************************** 
 	 Dieses NAS-KONV Beispiel erstellt eine HMTL-Seite mit Informationen 
 	 zu Aufnahmepunkten.
 	 ******************************************************************** -->	 
-<?xml-stylesheet type="text/xsl" href="xslt/nasconv_aufnahmepunkte.xsl"?>
+
+<!-- ******************************************************************** 
+	 Das Öffnen dieser XML Datei in einem Web Browser bewirkt, dass aus 
+	 den im Block <nas_files> aufgeführten NAS Dateien Informationen 
+	 extrahiert und als HTML Seite präsentiert werden. 
+	 
+	 Die Regeln, welche Informationen extrahiert werden sollen, sind in 
+	 der durch XML-STYLESHEET referenzierten Datei nasconv_THEMA_exsl.xsl 
+	 definiert.
+	 
+	 nasconv_THEMA_exsl.xsl nutzt die proprietäre XSLT 1.0 Erweiterung 
+	 exsl:node-set(), die nur von Web Browsern verarbeitet werden kann, 
+	 die Gecko als XSL Parser Gecko einsetzen (z.B. Firefox).
+	 
+	 Soll ein abweichender Web Browser verwendet werden (z.B. IE), muss
+	 ein analoges Stylesheet (z.B. nasconv_THEMA_msxsl.xsl) definiert und 
+	 referenziert werden, dass eine entprechende proprietäre XSLT 1.0 
+	 Erweiterung (zB. msxl:node-set()) nutzt.
+	 
+	 Weitere Alternativ - gleich über einen XSLT 2.0 Parser konvertieren.
+	 Siehe auch NASKONV Ticket 1 - https://github.com/lczub/nas-konv/issues/1
+	 ******************************************************************** -->
+<?xml-stylesheet type="text/xsl" href="xslt/nasconv_aufnahmepunkte_exsl.xsl"?>
 
 
 <nas_files>

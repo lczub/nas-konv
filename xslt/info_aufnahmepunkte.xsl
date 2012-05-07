@@ -31,59 +31,62 @@
 
 <!-- ******************************************************************** 
 	 Definition von XSLT-Transformationsregeln zur Extrahierung von
-	       Flurstücken (AX_Flurstueck) -> HTML
-	       - gruppiert nach Gemarkung + Flur
+	       Aufnahmepunkten (AX_Aufnahmepunkt) -> temp. XML Bäume
 	 aus NAS Dateien, Stand GeoInfoDok Version 6.0
-	 
-	 Verwendet XSLT 2.0 Element xsl:for-each-group und kann somit nicht 
-	 durch Firefox/IE verarbeitet werden. Beispielhafter Aufruf mittels 
-	 Saxon HE: 
-	 net.sf.saxon.Transform -s:nasconv_flurstuecke.xml 
-	                        -xsl:xslt/nasconv_flurstuecke-gruppiert.xsl 
-	                        -o:nasconv_flurstuecke-gruppiert.html 
-	 
-	 In den Kommentaren der Datei nasconv_general.xsl ist beschrieben, in
-	 welcher XML-Struktur die Liste der zu durchsuchenden NAS-Dateien 
-	 übergeben werden muss.
+
+	 Dieses StyleSheet sollte nicht direkt aufgerufen werden, sondern 
+	 mittels xml:import von anderen NAS-KONV StyleSheets eingebunden werden. 
 	 ******************************************************************** -->
 
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="1.1" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:adv="http://www.adv-online.de/namespaces/adv/gid/6.0" 
 	xmlns:gml="http://www.opengis.net/gml/3.2"
 	xmlns:xlink="http://www.w3.org/1999/xlink">
-<!-- Allgemeine Regeln, Lesen nas_file Struktur, Regeln Flurstueck einbinden -->
-<xsl:import href="nasconv_flurstuecke.xsl"/>	
 
-<xsl:template match="/adv:*">
-	<!-- Suche nach Knoten AX_Flurstueck und Ausgabe als Tabellenblock, 
-	     grupppiert nach Gemarkung + Flur -->
+<!-- =======================================================================
+	 Templates zum Aufbau der temp. XML Struktur mit Infos zu Aufnahmepunkte 
+ 	 ======================================================================= -->
+
+<xsl:template match="adv:AX_Aufnahmepunkt|adv:AX_Sicherungspunkt" mode="info">
+	<!-- Infobaum mit Sachdaten zu AX_Aufnahmepunkt oder AX_Sicherungspunkt
+		 und zugehörigen Punktorten -->
+	<xsl:variable name="objid"><xsl:value-of select="gml:identifier"/></xsl:variable>
+	<info>
+		<xsl:attribute name="class">
+			<xsl:value-of select="local-name()"/>
+		</xsl:attribute>
+        <xsl:attribute name="Punktkennung">
+        	<xsl:value-of select="adv:punktkennung"/>
+        </xsl:attribute>
+        <xsl:attribute name="Stelle">
+        	<xsl:value-of select="adv:zustaendigeStelle/*/adv:land"/> -	<xsl:value-of select="adv:zustaendigeStelle/*/adv:stelle"/>
+        </xsl:attribute>
+        <xsl:attribute name="Vermarkung">
+        	<xsl:value-of select="adv:vermarkung_Marke"/>
+        </xsl:attribute>
+        <xsl:attribute name="Identifier">
+        	<xsl:value-of select="$objid"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="//adv:*[adv:istTeilVon/@xlink:href=$objid]" mode="info"/>
+	</info>
+</xsl:template>
+
+<xsl:template match="adv:AX_PunktortAU" mode="info">
+	<!-- Infobaum mit Koordinaten und Bezugsystem eines AX_PunktortAU -->
 	
-	<xsl:for-each-group select="//adv:AX_Flurstueck" group-by="adv:gemarkung/*/adv:gemarkungsnummer">
-		<!--  1. Gruppierung der Flurstücke nach Gemarkung /r -->
-		<xsl:sort select="current-grouping-key()"/>
-		<xsl:variable name="gemarkung" select="current-grouping-key()"/>		
-
-		<xsl:for-each-group select="current-group()" group-by="adv:flurnummer">
-			<!--  2. Gruppierung der Flurstücke nach Flurnummer -->
-			<xsl:sort select="current-grouping-key()"/>			 
-
-			<h3>Liste der Flurstücke - Gemarkung <xsl:value-of select="$gemarkung"/> - Flur <xsl:value-of select="current-grouping-key()"/></h3>
-			<!--  Start Ausgabe Flurstückstabelle -->
-			<table border="1">
-				<xsl:call-template name="def-tabelle-flst"/>
-			
-				<!-- Ausgabe der einzelnen AX_Flurstueck Datensaetze -->
-				<xsl:apply-templates select="current-group()" mode="html">
-					<!--  Sortierung der Flurstuecke nach Gemarkung und Flur -->
-					<xsl:sort select="adv:flurstueckskennzeichen"/>			 
-				</xsl:apply-templates>
-				
-	    	</table>
-			<!--  Ende Flurstückstabelle -->
-		</xsl:for-each-group>
-		
-	</xsl:for-each-group>	     
-</xsl:template> 
+	<info>
+		<xsl:attribute name="class">
+			<xsl:value-of select="local-name()"/>
+		</xsl:attribute>
+		<xsl:attribute name="Position">
+			<xsl:value-of select="adv:position/gml:Point/gml:pos"/>
+        </xsl:attribute>
+        <xsl:attribute name="Bezugssystem">
+			<xsl:value-of select="adv:position//@srsName[1]"/>
+        </xsl:attribute>
+	</info>
+	
+</xsl:template>
 
 </xsl:stylesheet>

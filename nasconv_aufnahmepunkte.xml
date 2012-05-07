@@ -40,7 +40,7 @@
 	 extrahiert und als HTML Seite präsentiert werden. 
 	 
 	 Die Regeln, welche Informationen extrahiert werden sollen, sind in 
-	 der in XML-STYLESHEET referenzierte XSL Datei nasconv_THEMA_exsl.xsl 
+	 der durch XML-STYLESHEET referenzierten Datei nasconv_THEMA_exsl.xsl 
 	 definiert.
 	 
 	 nasconv_THEMA_exsl.xsl nutzt die proprietäre XSLT 1.0 Erweiterung 

@@ -46,6 +46,33 @@
 
 
 <!-- =======================================================================
+	 Key Definitionen zum Verfolgen von Verweisen zwischen NAS Datensätzen
+ 	 ======================================================================= -->
+
+<!-- KEY-Definition für Zugriff auf AX_LagebezeichnungOhneHausnummer über gml:identifier -->
+<xsl:key name="lage_ohne_Hsnr" match="//adv:AX_LagebezeichnungOhneHausnummer" use="gml:identifier"/>
+
+<!-- KEY-Definition für Zugriff auf AX_LagebezeichnungMitHausnummer über gml:identifier -->
+<xsl:key name="lage_mit_Hsnr" match="//adv:AX_LagebezeichnungMitHausnummer" use="gml:identifier"/>
+
+<!-- KEY-Definition für Zugriff auf AX_Buchungsstelle über gml:identifier -->
+<xsl:key name="buchungsstelle" match="//adv:AX_Buchungsstelle" use="gml:identifier"/>
+
+<!-- KEY-Definition für Zugriff auf AX_Buchungsblatt über gml:identifier -->
+<xsl:key name="buchungsblatt" match="//adv:AX_Buchungsblatt" use="gml:identifier"/>
+
+<!-- KEY-Definition für Zugriff auf AX_Person über gml:identifier -->
+<xsl:key name="person" match="//adv:AX_Person" use="gml:identifier"/>
+
+<!-- KEY-Definition für Zugriff auf AX_Anschrift über gml:identifier -->
+<xsl:key name="anschrift" match="//adv:AX_Anschrift" use="gml:identifier"/>
+
+<!-- KEY-Definition für Zugriff auf AX_Namensnummer, die ein Buchungsblatt
+     über dessen ID referenzieren -->
+<xsl:key name="namensnr_zu_blatt" match="//adv:AX_Namensnummer" use="adv:istBestandteilVon/@xlink:href"/>
+
+
+<!-- =======================================================================
 	 Templates zum Aufbau der temp. XML Struktur mit Infos zu Flurstücken 
  	 ======================================================================= -->
 
@@ -84,21 +111,15 @@
         <xsl:attribute name="amtlicheFlaeche">
         	<xsl:value-of select="adv:amtlicheFlaeche"/>
         </xsl:attribute>
-        <xsl:apply-templates select="adv:zeigtAuf|adv:weistAuf" mode="info"/>
-		<xsl:apply-templates select="adv:istGebucht" mode="info"/>
+        
+        <!-- Ermittlung der referenzierten AX_LagebezeichnungOhneHausnummer -->
+		<xsl:apply-templates select="key('lage_ohne_Hsnr', adv:zeigtAuf/@xlink:href)" mode="info"/>	
+		<!-- Ermittlung der referenzierten AX_LagebezeichnungMitHausnummer -->	        	 
+        <xsl:apply-templates select="key('lage_mit_Hsnr', adv:weistAuf/@xlink:href)" mode="info"/>
+        <!-- Ermittlung der referenzierten AX_Buchungsstelle -->
+		<xsl:apply-templates select="key('buchungsstelle', adv:istGebucht/@xlink:href)" mode="info"/>
+		
 	</info>
-</xsl:template>
-
-<!-- KEY-Definition für Zugriff auf AX_LagebezeichnungOhneHausnummer über gml:identifier -->
-<xsl:key name="lage_ohne_Hsnr" match="//adv:AX_LagebezeichnungOhneHausnummer" use="gml:identifier"/>
-
-<xsl:template match="adv:zeigtAuf" mode="info">
-	<!-- Ermittlung der vom AX_Flurstueck referenzierten AX_LagebezeichnungOhneHausnummer 
-		 und Aufbau des Infobaumes -->
-	
-	<xsl:variable name="lage" select="key('lage_ohne_Hsnr', @xlink:href)"/>
-   	<xsl:apply-templates select="$lage" mode="info"/>
-	
 </xsl:template>
 
 <xsl:template match="adv:AX_LagebezeichnungOhneHausnummer" mode="info">
@@ -128,17 +149,6 @@
 	
 </xsl:template>
 
-<!-- KEY-Definition für Zugriff auf AX_LagebezeichnungMitHausnummer über gml:identifier -->
-<xsl:key name="lage_mit_Hsnr" match="//adv:AX_LagebezeichnungMitHausnummer" use="gml:identifier"/>
-
-<xsl:template match="adv:weistAuf" mode="info">
-	<!-- Ermittlung der vom AX_Flurstueck referenzierten AX_LagebezeichnungMitHausnummer 
-		 und Aufbau des Infobaumes  -->
-	<xsl:variable name="lage" select="key('lage_mit_Hsnr', @xlink:href)"/>
-   	<xsl:apply-templates select="$lage" mode="info"/>
-
-</xsl:template>
-
 <xsl:template match="adv:AX_LagebezeichnungMitHausnummer" mode="info">
 	<!-- Infobaum einer AX_LagebezeichnungMitHausnummer erstellen -->
 	
@@ -157,21 +167,6 @@
 
 </xsl:template>
 
-<!-- KEY-Definition für Zugriff auf AX_Buchungsstelle über gml:identifier -->
-<xsl:key name="buchungsstelle" match="//adv:AX_Buchungsstelle" use="gml:identifier"/>
-
-<!-- KEY-Definition für Zugriff auf AX_Buchungsblatt über gml:identifier -->
-<xsl:key name="buchungsblatt" match="//adv:AX_Buchungsblatt" use="gml:identifier"/>
-
-<xsl:template match="adv:istGebucht" mode="info">
-	<!-- Ermittlung der vom AX_Flurstueck referenzierten AX_Buchungsstelle und 
-		 Aufbau des Infobaumes -->
-
-	<xsl:variable name="stelle" select="key('buchungsstelle', @xlink:href)"/>
-   	<xsl:apply-templates select="$stelle" mode="info"/>
-	
-</xsl:template>
-
 <xsl:template match="adv:AX_Buchungsstelle" mode="info">
 	<!-- Infobaum einer AX_Buchungsstelle erstellen incl. durch Join 
 		 'istBestandteilVon' referenziertem AX_Buchungsblatt -->
@@ -185,8 +180,7 @@
         	<xsl:value-of select="adv:laufendeNummer"/>
         </xsl:attribute>
 	
-		<!-- Ermittlung des vom AX_Buchungsstelle referenzierten 
-			 AX_Buchungsblatt und Aufbau des Infobaumes -->
+		<!-- Ermittlung des referenzierten AX_Buchungsblatt -->
 		<xsl:variable name="blatt" select="key('buchungsblatt', adv:istBestandteilVon/@xlink:href)"/>
 	   	<xsl:apply-templates select="$blatt" mode="info"/>
 	</info>
@@ -213,15 +207,12 @@
         	<xsl:value-of select="adv:blattart"/>
         </xsl:attribute>
         
-       	<!-- Ermittlung der AX_Namensnummern, die das Buchungsblatt über die ID 
-       		 referenzieren und Aufbau des Infobaumes -->
-		<xsl:apply-templates select="//adv:AX_Namensnummer[adv:istBestandteilVon/@xlink:href=$objid]" mode="info"/>
+       	<!-- Ermittlung der AX_Namensnummern, die dieses Buchungsblatt über die
+       	     dessen ID referenzieren -->
+		<xsl:apply-templates select="key('namensnr_zu_blatt', $objid)" mode="info"/>
 	</info>
 	
 </xsl:template>
-
-<!-- KEY-Definition für Zugriff auf AX_Person über gml:identifier -->
-<xsl:key name="person" match="//adv:AX_Person" use="gml:identifier"/>
 
 <xsl:template match="adv:AX_Namensnummer" mode="info">
 	<!-- Infobaum einer AX_Namensnummer erstellen incl. durch Join 'benennt' 
@@ -239,9 +230,6 @@
 	</info>
 	
 </xsl:template>
-
-<!-- KEY-Definition für Zugriff auf AX_Anschrift über gml:identifier -->
-<xsl:key name="anschrift" match="//adv:AX_Anschrift" use="gml:identifier"/>
 
 <xsl:template match="adv:AX_Person" mode="info">
 	<!-- Infobaum einer AX_Person erstellen incl. durch Join 'hat' 

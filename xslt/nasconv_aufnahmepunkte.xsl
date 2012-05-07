@@ -78,7 +78,10 @@
 			<th>Vermarkung</th><th>Identifier</th>
 			<th>Punktorte</th>
 		</tr>
-		<xsl:apply-templates select="//adv:AX_Aufnahmepunkt" mode="html"/>
+		<xsl:apply-templates select="//adv:AX_Aufnahmepunkt" mode="html">
+			<!--  Sortierung der Aufnahmepunkte nach der Punktkennung -->
+			<xsl:sort select="adv:punktkennung"/>			 
+		</xsl:apply-templates>
     </table>
 </xsl:template> 
 

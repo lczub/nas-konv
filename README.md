@@ -92,7 +92,7 @@ haben. Falls nicht, siehe <http://opensource.org/licenses/MIT>.
 [Saxon-HE]: http://saxon.sourceforge.net/
 [W3Schools Online Web Tutorial]: http://www.w3schools.com
 [XSLT Tutorial]: http://www.w3schools.com/xsl/default.asp
-[data\README]: https://github.com/lczub/nas-konv/blob/master/data/README
+[data\README]: https://github.com/lczub/nas-konv/blob/master/data/README.md
 [Sourceforge Projekt NAS-KONV]: http://sourceforge.net/projects/naskonv
 [GitHub NAS-KONV Repository]: https://github.com/lczub/nas-konv
 [GitHub NAS-KONV Tickets]: https://github.com/lczub/nas-konv/issues

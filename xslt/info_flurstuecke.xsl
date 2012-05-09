@@ -55,8 +55,11 @@
 <!-- KEY-Definition für Zugriff auf AX_LagebezeichnungMitHausnummer über gml:identifier -->
 <xsl:key name="lage_mit_Hsnr" match="//adv:AX_LagebezeichnungMitHausnummer" use="gml:identifier"/>
 
-<!-- KEY-Definition für Zugriff auf AX_Gemarkung über schluesselGesamt -->
-<xsl:key name="gemarkung" match="//adv:AX_Gemarkung" use="adv:schluesselGesamt"/>
+<!-- KEY-Definition für Zugriff auf AX_Gemarkung über schluessel/AX_Gemarkung_Schluessel -->
+<xsl:key name="gemarkung" match="//adv:AX_Gemarkung" use="adv:schluessel"/>
+
+<!-- KEY-Definition für Zugriff auf AX_Gemarkung über gemeindekennzeichen/AX_Gemeindekennzeichen -->
+<xsl:key name="gemeinde" match="//adv:AX_Gemeinde" use="adv:gemeindekennzeichen"/>
 
 <!-- KEY-Definition für Zugriff auf AX_Buchungsstelle über gml:identifier -->
 <xsl:key name="buchungsstelle" match="//adv:AX_Buchungsstelle" use="gml:identifier"/>
@@ -106,8 +109,11 @@
         <xsl:attribute name="Gemarkung">
         	<xsl:value-of select="$gmkid"/>
         </xsl:attribute>
+        <xsl:attribute name="GemarkungsSchluessel">
+        	<xsl:value-of select="adv:gemarkung"/>
+        </xsl:attribute>
         <xsl:attribute name="Gemarkungsname">
-        	<xsl:value-of select="key('gemarkung', concat($landid, $gmkid))/adv:bezeichnung"/>
+        	<xsl:value-of select="key('gemarkung', adv:gemarkung)/adv:bezeichnung"/>
         </xsl:attribute>
         
         <xsl:attribute name="Stelle">
@@ -129,6 +135,13 @@
         <xsl:attribute name="amtlicheFlaeche">
         	<xsl:value-of select="adv:amtlicheFlaeche"/>
         </xsl:attribute>
+        <xsl:attribute name="GemeindeKennzeichen">
+        	<xsl:value-of select="adv:gemeindezugehoerigkeit"/>
+        </xsl:attribute>
+        <xsl:attribute name="Gemeindename">
+        	<xsl:value-of select="key('gemeinde', adv:gemeindezugehoerigkeit)/adv:bezeichnung"/>
+        </xsl:attribute>
+        
         
         <!-- Ermittlung der referenzierten AX_LagebezeichnungOhneHausnummer -->
 		<xsl:apply-templates select="key('lage_ohne_Hsnr', adv:zeigtAuf/@xlink:href)" mode="info"/>	

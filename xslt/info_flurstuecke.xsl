@@ -86,6 +86,10 @@
 		 - Join 'istGebucht' referenzierter AX_Buchungsstelle und hiervon
 		   referenziertem  AX_Buchungsblatt -> AX_Person  -->
 	<xsl:variable name="objid"><xsl:value-of select="gml:identifier"/></xsl:variable>
+	<xsl:variable name="landid"><xsl:value-of select="adv:gemarkung/*/adv:land"/></xsl:variable>
+	<xsl:variable name="gmkid"><xsl:value-of select="adv:gemarkung/*/adv:gemarkungsnummer"/></xsl:variable>
+	<xsl:variable name="zaehler"><xsl:value-of select="adv:flurstuecksnummer/*/adv:zaehler"/></xsl:variable>
+	<xsl:variable name="nenner"><xsl:value-of select="adv:flurstuecksnummer/*/adv:nenner"/></xsl:variable>
 	<info>
 		<xsl:attribute name="class">
 			<xsl:value-of select="local-name()"/>
@@ -97,13 +101,13 @@
         	<xsl:value-of select="adv:flurstueckskennzeichen"/>
         </xsl:attribute>
         <xsl:attribute name="Land">
-        	<xsl:value-of select="adv:gemarkung/*/adv:land"/>
+        	<xsl:value-of select="$landid"/>
         </xsl:attribute>
         <xsl:attribute name="Gemarkung">
-        	<xsl:value-of select="adv:gemarkung/*/adv:gemarkungsnummer"/>
+        	<xsl:value-of select="$gmkid"/>
         </xsl:attribute>
         <xsl:attribute name="Gemarkungsname">
-        	<xsl:value-of select="key('gemarkung', concat(adv:gemarkung/*/adv:land, adv:gemarkung/*/adv:gemarkungsnummer))/adv:bezeichnung"/>
+        	<xsl:value-of select="key('gemarkung', concat($landid, $gmkid))/adv:bezeichnung"/>
         </xsl:attribute>
         
         <xsl:attribute name="Stelle">
@@ -113,10 +117,14 @@
         	<xsl:value-of select="adv:flurnummer"/>
         </xsl:attribute>
         <xsl:attribute name="Zaehler">
-        	<xsl:value-of select="adv:flurstuecksnummer/*/adv:zaehler"/>
+        	<xsl:value-of select="$zaehler"/>
         </xsl:attribute>
         <xsl:attribute name="Nenner">
-        	<xsl:value-of select="adv:flurstuecksnummer/*/adv:nenner"/>
+        	<xsl:value-of select="$nenner"/>
+        </xsl:attribute>
+        <xsl:attribute name="FlstNr">
+        	<xsl:value-of select="$zaehler"/>
+        	<xsl:if test="$nenner!=''"> / <xsl:value-of select="$nenner" /></xsl:if>
         </xsl:attribute>
         <xsl:attribute name="amtlicheFlaeche">
         	<xsl:value-of select="adv:amtlicheFlaeche"/>

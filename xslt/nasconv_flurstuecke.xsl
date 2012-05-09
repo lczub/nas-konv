@@ -123,7 +123,7 @@
 		<td><xsl:value-of select="@Land"/><xsl:value-of select="@Gemarkung"/></td>
 		<td><xsl:value-of select="@Gemarkungsname"/></td>
         <td><xsl:value-of select="@Flur"/></td>
-        <td><xsl:value-of select="@Zaehler"/> / <xsl:value-of select="@Nenner"/></td>
+        <td><xsl:value-of select="@FlstNr"/></td>
         <td> <xsl:value-of select="@Kennzeichen"/></td>
         <td><xsl:value-of select="@amtlicheFlaeche"/></td>
 		<!-- HTML Ausgabe der Lagebezeichnungen in einer Tabellenzelle anstossen -->

@@ -55,6 +55,9 @@
 <!-- KEY-Definition für Zugriff auf AX_LagebezeichnungMitHausnummer über gml:identifier -->
 <xsl:key name="lage_mit_Hsnr" match="//adv:AX_LagebezeichnungMitHausnummer" use="gml:identifier"/>
 
+<!-- KEY-Definition für Zugriff auf AX_Gemarkung über schluesselGesamt -->
+<xsl:key name="gemarkung" match="//adv:AX_Gemarkung" use="adv:schluesselGesamt"/>
+
 <!-- KEY-Definition für Zugriff auf AX_Buchungsstelle über gml:identifier -->
 <xsl:key name="buchungsstelle" match="//adv:AX_Buchungsstelle" use="gml:identifier"/>
 
@@ -90,12 +93,19 @@
         <xsl:attribute name="Identifier">
         	<xsl:value-of select="$objid"/>
         </xsl:attribute>
+        <xsl:attribute name="Kennzeichen">
+        	<xsl:value-of select="adv:flurstueckskennzeichen"/>
+        </xsl:attribute>
         <xsl:attribute name="Land">
         	<xsl:value-of select="adv:gemarkung/*/adv:land"/>
         </xsl:attribute>
         <xsl:attribute name="Gemarkung">
         	<xsl:value-of select="adv:gemarkung/*/adv:gemarkungsnummer"/>
         </xsl:attribute>
+        <xsl:attribute name="Gemarkungsname">
+        	<xsl:value-of select="key('gemarkung', concat(adv:gemarkung/*/adv:land, adv:gemarkung/*/adv:gemarkungsnummer))/adv:bezeichnung"/>
+        </xsl:attribute>
+        
         <xsl:attribute name="Stelle">
         	<xsl:value-of select="adv:zustaendigeStelle/*/adv:stelle"/>
         </xsl:attribute>

@@ -71,8 +71,8 @@
 	<!-- Definition der Tabelle zur Ausgabe von Flurstuecken -->
 	
 	<tr bgcolor="#9acd32">
-		<th>Gemarkung</th><th>Flur</th>
-		<th>Flst-Nr</th><th>Identifier</th>
+		<th>Gemarkung</th><th>Gemarkungsname</th><th>Flur</th>
+		<th>Flst-Nr</th><th>Kennzeichen</th>
 		<th>amtliche Fläche</th>
 		<th>Lagebezeichnung</th>
 		<th>Buchungsstelle u. -blatt</th>
@@ -120,10 +120,11 @@
 
 	<xsl:variable name="objid"><xsl:value-of select="gml:identifier"/></xsl:variable>
 	<tr>
-		<td><xsl:value-of select="@Land"/> - <xsl:value-of select="@Gemarkung"/></td>
+		<td><xsl:value-of select="@Land"/><xsl:value-of select="@Gemarkung"/></td>
+		<td><xsl:value-of select="@Gemarkungsname"/></td>
         <td><xsl:value-of select="@Flur"/></td>
         <td><xsl:value-of select="@Zaehler"/> / <xsl:value-of select="@Nenner"/></td>
-        <td><xsl:value-of select="@Identifier"/></td>
+        <td> <xsl:value-of select="@Kennzeichen"/></td>
         <td><xsl:value-of select="@amtlicheFlaeche"/></td>
 		<!-- HTML Ausgabe der Lagebezeichnungen in einer Tabellenzelle anstossen -->
 		<td>

@@ -80,6 +80,26 @@
      über dessen ID referenzieren -->
 <xsl:key name="namensnr_zu_blatt" match="//adv:AX_Namensnummer" use="adv:istBestandteilVon/@xlink:href"/>
 
+<!-- =======================================================================
+	 Functionen (unter XSLT 1.0 nur "named" Templates untertsützt) 
+ 	 ======================================================================= -->
+ 	 
+<xsl:template name="lageSchluesselGesamt">
+	<!-- Berechnung des Attributes adv:schluesselGesamt aus 
+		 adv:AX_VerschluesselteLagebezeichnung für die Suche eines passendenden
+		 adv:AX_LagebezeichnungKatalogeintrag Satzes ( KEY lage_katalog).
+		 
+		 Im Parameter ax_vlb wird ein AX_VerschluesselteLagebezeichnung Satz
+		 erwartet.
+		 
+		 Eine KEY Definition direkt mit adv:AX_VerschluesselteLagebezeichnung 
+		 analog zum KEY gemeinde und gemarkung hat aus ungeklaren Gründen nicht
+		 funktioniert -->
+	<xsl:param name="ax_vlb" required="yes"/>
+	<xsl:value-of select="concat($ax_vlb/adv:land, $ax_vlb/adv:regierungsbezirk,
+								 $ax_vlb/adv:kreis, $ax_vlb/adv:gemeinde,
+								 $ax_vlb/adv:lage)"/>			 
+</xsl:template>
 
 <!-- =======================================================================
 	 Templates zum Aufbau der temp. XML Struktur mit Infos zu Flurstücken 
@@ -159,6 +179,7 @@
 <xsl:template match="adv:AX_LagebezeichnungOhneHausnummer" mode="info">
 	<!-- Infobaum einer AX_LagebezeichnungOhneHausnummer erstellen -->
 	
+
 	<info>
 		<xsl:attribute name="class">
 			<xsl:value-of select="local-name()"/>
@@ -167,13 +188,12 @@
 		<xsl:choose>
 			<xsl:when test=".//adv:verschluesselt">
 				<!-- Ausgabe der verschluesselten Lagebezeichnung ($schluessel, ' ', '')-->
-				<xsl:variable name="lageid" 
-				select="concat(.//adv:AX_VerschluesselteLagebezeichnung/adv:land,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:regierungsbezirk,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:kreis,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:gemeinde,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:lage
-				)"/>
+				<xsl:variable name="lageid">
+					<xsl:call-template name="lageSchluesselGesamt">
+						<xsl:with-param name="ax_vlb" 
+										select=".//adv:AX_VerschluesselteLagebezeichnung"/>
+					</xsl:call-template>
+				</xsl:variable>
     	
 				<xsl:attribute name="Schluessel">
 					<xsl:value-of select=".//adv:AX_VerschluesselteLagebezeichnung"/>
@@ -194,17 +214,16 @@
 	
 </xsl:template>
 
+
 <xsl:template match="adv:AX_LagebezeichnungMitHausnummer" mode="info">
 	<!-- Infobaum einer AX_LagebezeichnungMitHausnummer erstellen -->
 	
-	<xsl:variable name="lageid" 
-		select="concat(.//adv:AX_VerschluesselteLagebezeichnung/adv:land,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:regierungsbezirk,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:kreis,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:gemeinde,
-				.//adv:AX_VerschluesselteLagebezeichnung/adv:lage
-		)"/>
-    	
+	<xsl:variable name="lageid">
+		<xsl:call-template name="lageSchluesselGesamt">
+			<xsl:with-param name="ax_vlb" 
+							select=".//adv:AX_VerschluesselteLagebezeichnung"/>
+		</xsl:call-template>
+	</xsl:variable>
 	
 	<info>
 		<xsl:attribute name="class">

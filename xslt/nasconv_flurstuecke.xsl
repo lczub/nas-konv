@@ -77,6 +77,7 @@
 		<th>Gemeinde</th>
 		<th>Gemeindename</th>
 		<th>Lagebezeichnung</th>
+		<th>Lagebez. mit Hsnr</th>
 		<th>Buchungsstelle u. -blatt</th>
 		<th>Personen</th>
 	</tr>
@@ -131,9 +132,12 @@
         <td><xsl:value-of select="@GemeindeKennzeichen"/></td>
         <td><xsl:value-of select="@Gemeindename"/></td>
         
-		<!-- HTML Ausgabe der Lagebezeichnungen in einer Tabellenzelle anstossen -->
+		<!-- HTML Ausgabe der Lagebezeichnungen ohne Hsnr in einer Tabellenzelle anstossen -->
 		<td>
 			<xsl:apply-templates select="info[@class='AX_LagebezeichnungOhneHausnummer']" mode="html"/>
+		</td>
+		<!-- HTML Ausgabe der Lagebezeichnungen mit Hsnr in einer Tabellenzelle anstossen -->
+		<td>
 			<xsl:apply-templates select="info[@class='AX_LagebezeichnungMitHausnummer']" mode="html"/>
 		</td>
 		<!-- HTML Ausgabe des Buchungsblatt in einer Tabellenzelle anstossen -->
@@ -148,7 +152,6 @@
 		 einer HTML Tabellenzelle -->
 	
 	<xsl:value-of select="@Bezeichnung"/>
-	<xsl:value-of select="@Schluessel"/>
 	<br />
 </xsl:template>
 
@@ -156,8 +159,8 @@
 	<!-- Ausgabe der Infos eines AX_LagebezeichnungMitHausnummer innerhalb einer
 		 HTML Tabellenzelle -->
 	
-	<xsl:value-of select="@Schluessel"/>
-	<xsl:text> HsNr </xsl:text>
+	<xsl:value-of select="@Bezeichnung"/>
+	<xsl:text> </xsl:text>
 	<xsl:value-of select="@HsNr"/>
 	<br />
 </xsl:template>

@@ -55,6 +55,9 @@
 <!-- KEY-Definition für Zugriff auf AX_LagebezeichnungMitHausnummer über gml:identifier -->
 <xsl:key name="lage_mit_Hsnr" match="//adv:AX_LagebezeichnungMitHausnummer" use="gml:identifier"/>
 
+<!-- KEY-Definition für Zugriff auf AX_LagebezeichnungKatalogeintrag über schluesselFesamt -->
+<xsl:key name="lage_katalog" match="//adv:AX_LagebezeichnungKatalogeintrag" use="adv:schluesselGesamt"/>
+
 <!-- KEY-Definition für Zugriff auf AX_Gemarkung über schluessel/AX_Gemarkung_Schluessel -->
 <xsl:key name="gemarkung" match="//adv:AX_Gemarkung" use="adv:schluessel"/>
 
@@ -88,11 +91,11 @@
 		 - Join 'weistAuf' referenzierter AX_LagebezeichnungMitHausnummer
 		 - Join 'istGebucht' referenzierter AX_Buchungsstelle und hiervon
 		   referenziertem  AX_Buchungsblatt -> AX_Person  -->
-	<xsl:variable name="objid"><xsl:value-of select="gml:identifier"/></xsl:variable>
-	<xsl:variable name="landid"><xsl:value-of select="adv:gemarkung/*/adv:land"/></xsl:variable>
-	<xsl:variable name="gmkid"><xsl:value-of select="adv:gemarkung/*/adv:gemarkungsnummer"/></xsl:variable>
-	<xsl:variable name="zaehler"><xsl:value-of select="adv:flurstuecksnummer/*/adv:zaehler"/></xsl:variable>
-	<xsl:variable name="nenner"><xsl:value-of select="adv:flurstuecksnummer/*/adv:nenner"/></xsl:variable>
+	<xsl:variable name="objid" select="gml:identifier"/>
+	<xsl:variable name="landid" select="adv:gemarkung/*/adv:land"/>
+	<xsl:variable name="gmkid" select="adv:gemarkung/*/adv:gemarkungsnummer"/>
+	<xsl:variable name="zaehler" select="adv:flurstuecksnummer/*/adv:zaehler"/>
+	<xsl:variable name="nenner" select="adv:flurstuecksnummer/*/adv:nenner"/>
 	<info>
 		<xsl:attribute name="class">
 			<xsl:value-of select="local-name()"/>
@@ -162,10 +165,21 @@
 		</xsl:attribute>
 		
 		<xsl:choose>
-			<xsl:when test=".//adv:AX_VerschluesselteLagebezeichnung">
-				<!-- Ausgabe der verschluesselten Lagebezeichnung -->
+			<xsl:when test=".//adv:verschluesselt">
+				<!-- Ausgabe der verschluesselten Lagebezeichnung ($schluessel, ' ', '')-->
+				<xsl:variable name="lageid" 
+				select="concat(.//adv:AX_VerschluesselteLagebezeichnung/adv:land,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:regierungsbezirk,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:kreis,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:gemeinde,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:lage
+				)"/>
+    	
 				<xsl:attribute name="Schluessel">
 					<xsl:value-of select=".//adv:AX_VerschluesselteLagebezeichnung"/>
+				</xsl:attribute>
+				<xsl:attribute name="Bezeichnung">
+					<xsl:value-of select="key('lage_katalog', $lageid)/adv:bezeichnung"/>
 				</xsl:attribute>
 			</xsl:when>
 			<xsl:otherwise>
@@ -183,6 +197,15 @@
 <xsl:template match="adv:AX_LagebezeichnungMitHausnummer" mode="info">
 	<!-- Infobaum einer AX_LagebezeichnungMitHausnummer erstellen -->
 	
+	<xsl:variable name="lageid" 
+		select="concat(.//adv:AX_VerschluesselteLagebezeichnung/adv:land,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:regierungsbezirk,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:kreis,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:gemeinde,
+				.//adv:AX_VerschluesselteLagebezeichnung/adv:lage
+		)"/>
+    	
+	
 	<info>
 		<xsl:attribute name="class">
 			<xsl:value-of select="local-name()"/>
@@ -190,6 +213,9 @@
 		<!-- Ausgabe der verschluesselten Lagebezeichnung -->
 		<xsl:attribute name="Schluessel">
 			<xsl:value-of select=".//adv:AX_VerschluesselteLagebezeichnung"/>
+		</xsl:attribute>
+		<xsl:attribute name="Bezeichnung">
+			<xsl:value-of select="key('lage_katalog', $lageid)/adv:bezeichnung"/>
 		</xsl:attribute>
 		<xsl:attribute name="HsNr">
   			<xsl:value-of select="adv:hausnummer"/>

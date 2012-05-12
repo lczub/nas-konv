@@ -98,7 +98,7 @@
 	<xsl:param name="ax_vlb" required="yes"/>
 	<xsl:value-of select="concat($ax_vlb/adv:land, $ax_vlb/adv:regierungsbezirk,
 								 $ax_vlb/adv:kreis, $ax_vlb/adv:gemeinde,
-								 $ax_vlb/adv:lage)"/>			 
+								 $ax_vlb/adv:lage)"/>
 </xsl:template>
 
 <!-- =======================================================================
@@ -179,37 +179,17 @@
 <xsl:template match="adv:AX_LagebezeichnungOhneHausnummer" mode="info">
 	<!-- Infobaum einer AX_LagebezeichnungOhneHausnummer erstellen -->
 	
-
 	<info>
 		<xsl:attribute name="class">
 			<xsl:value-of select="local-name()"/>
 		</xsl:attribute>
-		
-		<xsl:choose>
-			<xsl:when test=".//adv:verschluesselt">
-				<!-- Ausgabe der verschluesselten Lagebezeichnung ($schluessel, ' ', '')-->
-				<xsl:variable name="lageid">
-					<xsl:call-template name="lageSchluesselGesamt">
-						<xsl:with-param name="ax_vlb" 
-										select=".//adv:AX_VerschluesselteLagebezeichnung"/>
-					</xsl:call-template>
-				</xsl:variable>
-    	
-				<xsl:attribute name="Schluessel">
-					<xsl:value-of select=".//adv:AX_VerschluesselteLagebezeichnung"/>
-				</xsl:attribute>
-				<xsl:attribute name="Bezeichnung">
-					<xsl:value-of select="key('lage_katalog', $lageid)/adv:bezeichnung"/>
-				</xsl:attribute>
-			</xsl:when>
-			<xsl:otherwise>
-				<!-- Ausgabe der unverschluesselten Lagebezeichnung -->
-				<xsl:attribute name="Bezeichnung">
-					<xsl:value-of select=".//adv:unverschluesselt"/>
-				</xsl:attribute>
-			</xsl:otherwise>
-		</xsl:choose>
-		
+		<!-- Ausgabe der verschluesselten Lagebezeichnung -->
+		<xsl:attribute name="Schluessel">
+			<xsl:value-of select=".//adv:AX_VerschluesselteLagebezeichnung"/>
+		</xsl:attribute>
+		<xsl:attribute name="Bezeichnung">
+			<xsl:apply-templates select=".//adv:AX_Lagebezeichnung" mode="info"/>
+		</xsl:attribute>
 	</info>
 	
 </xsl:template>
@@ -217,13 +197,6 @@
 
 <xsl:template match="adv:AX_LagebezeichnungMitHausnummer" mode="info">
 	<!-- Infobaum einer AX_LagebezeichnungMitHausnummer erstellen -->
-	
-	<xsl:variable name="lageid">
-		<xsl:call-template name="lageSchluesselGesamt">
-			<xsl:with-param name="ax_vlb" 
-							select=".//adv:AX_VerschluesselteLagebezeichnung"/>
-		</xsl:call-template>
-	</xsl:variable>
 	
 	<info>
 		<xsl:attribute name="class">
@@ -234,13 +207,38 @@
 			<xsl:value-of select=".//adv:AX_VerschluesselteLagebezeichnung"/>
 		</xsl:attribute>
 		<xsl:attribute name="Bezeichnung">
-			<xsl:value-of select="key('lage_katalog', $lageid)/adv:bezeichnung"/>
+			<xsl:apply-templates select=".//adv:AX_Lagebezeichnung" mode="info"/>
 		</xsl:attribute>
 		<xsl:attribute name="HsNr">
   			<xsl:value-of select="adv:hausnummer"/>
 		</xsl:attribute>
 	</info>
 
+</xsl:template>
+
+<xsl:template match="adv:AX_Lagebezeichnung" mode="info">
+	<!-- Ermittelt aus einem AX_Lagebezeichnung Satz die Bezeichnung
+		 Dies liegt entweder direkt im Element unverschluesselt vor, oder 
+		 verschluesselt im Element AX_VerschluesselteLagebezeichnung. 
+		 Die Bezeichnung findet sich dann in einem 
+		 AX_LagebezeichnungKatalogeintrag Satz.  -->
+		 
+	<xsl:choose>
+		<xsl:when test="adv:verschluesselt">
+			<!-- Ausgabe der verschluesselten Lagebezeichnung -->
+			<xsl:variable name="lageid">
+				<xsl:call-template name="lageSchluesselGesamt">
+					<xsl:with-param name="ax_vlb" 
+						select="adv:verschluesselt/adv:AX_VerschluesselteLagebezeichnung"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:value-of select="key('lage_katalog', $lageid)/adv:bezeichnung"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<!-- Ausgabe der unverschluesselten Lagebezeichnung -->
+			<xsl:value-of select="adv:unverschluesselt"/>
+		</xsl:otherwise>
+	</xsl:choose>		 
 </xsl:template>
 
 <xsl:template match="adv:AX_Buchungsstelle" mode="info">

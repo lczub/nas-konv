@@ -151,7 +151,14 @@
 	<!-- Ausgabe der Infos einer AX_LagebezeichnungOhneHausnummer innerhalb 
 		 einer HTML Tabellenzelle -->
 	
-	<xsl:value-of select="@Bezeichnung"/>
+	<xsl:choose>
+		<xsl:when test="@Bezeichnung != ''">
+			<xsl:value-of select="@Bezeichnung"/>
+		</xsl:when>
+		<xsl:otherwise>
+			(<xsl:value-of select="@Schluessel"/>)
+		</xsl:otherwise>
+	</xsl:choose>
 	<br />
 </xsl:template>
 
@@ -159,7 +166,14 @@
 	<!-- Ausgabe der Infos eines AX_LagebezeichnungMitHausnummer innerhalb einer
 		 HTML Tabellenzelle -->
 	
-	<xsl:value-of select="@Bezeichnung"/>
+	<xsl:choose>
+		<xsl:when test="@Bezeichnung != ''">
+			<xsl:value-of select="@Bezeichnung"/>
+		</xsl:when>
+		<xsl:otherwise>
+			(<xsl:value-of select="@Schluessel"/>)
+		</xsl:otherwise>
+	</xsl:choose>
 	<xsl:text> </xsl:text>
 	<xsl:value-of select="@HsNr"/>
 	<br />

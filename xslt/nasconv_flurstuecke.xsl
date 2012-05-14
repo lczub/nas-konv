@@ -105,51 +105,72 @@
 </xsl:template> 
 
 <xsl:template match="adv:AX_Flurstueck" mode="html">
-	<!-- Aufsammeln der Infos eines AX_Flurstueck und HTML Ausgabe anstossen -->
+	<!-- Aufsammeln der Infos eines AX_Flurstueck und HTML Ausgabe anstossen 
+		 Pro Flurstück wird eine Tabellenzeile erzeugt -->
 	
 	<!-- Infos des AX_Flurstueck aufsammeln -->
 	<xsl:variable name="flst_info">
 			<xsl:apply-templates select="." mode="info"/>
 	</xsl:variable>
 
-	<!-- HTML Ausgabe anstossen-->
+	<!-- HTML Ausgabe anstossen, pro Flurstück eine Tabellenzeile -->
 	<xsl:apply-templates select="$flst_info/info" mode="html"/>
 	
 	
 </xsl:template>
 
 <xsl:template match="info[@class='AX_Flurstueck']" mode="html">
-	<!-- Ausgabe der Infos eines AX_Flurstueck als HTML Tabellenzeile -->
+	<!-- Ausgabe der Infos eines AX_Flurstueck in einer HTML Tabellenzeile 
+		 Pro Flurstück wird eine Tabellenzeile erzeugt -->
 
-	<xsl:variable name="objid"><xsl:value-of select="gml:identifier"/></xsl:variable>
 	<tr>
-		<td><xsl:value-of select="@GemarkungsSchluessel"/></td>
-		<td><xsl:value-of select="@Gemarkungsname"/></td>
-        <td><xsl:value-of select="@Flur"/></td>
-        <td><xsl:value-of select="@FlstNr"/></td>
-        <td> <xsl:value-of select="@Kennzeichen"/></td>
-        <td><xsl:value-of select="@amtlicheFlaeche"/></td>
-        <td><xsl:value-of select="@GemeindeKennzeichen"/></td>
-        <td><xsl:value-of select="@Gemeindename"/></td>
+		<!-- Ausgabe HTML Zellen mit generellen Flurstücksinformationen -->
+		<xsl:apply-templates select="." mode="html_cells_flst"/>
+
+		<!-- Ausgabe HTML Zellen mit Lagebezeichnungen zum Flurstücks -->
+		<xsl:apply-templates select="." mode="html_cells_lage"/>
         
-		<!-- HTML Ausgabe der Lagebezeichnungen ohne Hsnr in einer Tabellenzelle anstossen -->
-		<td>
-			<xsl:apply-templates select="info[@class='AX_LagebezeichnungOhneHausnummer']" mode="html"/>
-		</td>
-		<!-- HTML Ausgabe der Lagebezeichnungen mit Hsnr in einer Tabellenzelle anstossen -->
-		<td>
-			<xsl:apply-templates select="info[@class='AX_LagebezeichnungMitHausnummer']" mode="html"/>
-		</td>
 		<!-- HTML Ausgabe des Buchungsblatt in einer Tabellenzelle anstossen -->
-		<td><xsl:apply-templates select="info[@class='AX_Buchungsstelle']" mode="html"/></td>
+		<td><xsl:apply-templates select="info[@class='AX_Buchungsstelle']" mode="html_compact"/></td>
 		<!-- HTML Ausgabe der Personendaten in einer Tabellenzelle anstossen -->
-        <td><xsl:apply-templates select=".//info[@class='AX_Person']" mode="html"/></td>
+        <td><xsl:apply-templates select=".//info[@class='AX_Person']" mode="html_compact"/></td>
 	</tr>
 </xsl:template>
 
-<xsl:template match="info[@class='AX_LagebezeichnungOhneHausnummer']" mode="html">
-	<!-- Ausgabe der Infos einer AX_LagebezeichnungOhneHausnummer innerhalb 
-		 einer HTML Tabellenzelle -->
+<xsl:template match="info[@class='AX_Flurstueck']" mode="html_cells_flst">
+	<!-- Ausgabe der generellen Infos eines AX_Flurstueck als Zellen einer 
+		 HTML Tabellenzeile -->
+
+	<td><xsl:value-of select="@GemarkungsSchluessel"/></td>
+	<td><xsl:value-of select="@Gemarkungsname"/></td>
+    <td><xsl:value-of select="@Flur"/></td>
+    <td><xsl:value-of select="@FlstNr"/></td>
+    <td><xsl:value-of select="@Kennzeichen"/></td>
+    <td><xsl:value-of select="@amtlicheFlaeche"/></td>
+    <td><xsl:value-of select="@GemeindeKennzeichen"/></td>
+    <td><xsl:value-of select="@Gemeindename"/></td>
+        
+</xsl:template>
+
+<xsl:template match="info[@class='AX_Flurstueck']" mode="html_cells_lage">
+	<!-- Ausgabe der Lagebezeichnungen eines AX_Flurstueck als Zellen einer 
+		 HTML Tabellenzeile -->
+
+	<!-- HTML Ausgabe der Lagebezeichnungen ohne Hsnr in einer Tabellenzelle anstossen -->
+	<td>
+		<xsl:apply-templates select="info[@class='AX_LagebezeichnungOhneHausnummer']" mode="html_compact"/>
+	</td>
+	<!-- HTML Ausgabe der Lagebezeichnungen mit Hsnr in einer Tabellenzelle anstossen -->
+	<td>
+		<xsl:apply-templates select="info[@class='AX_LagebezeichnungMitHausnummer']" mode="html_compact"/>
+	</td>
+
+</xsl:template>
+
+
+<xsl:template match="info[@class='AX_LagebezeichnungOhneHausnummer']" mode="html_compact">
+	<!-- Ausgabe der Infos einer AX_LagebezeichnungOhneHausnummer als Teil einer
+		 HTML Tabellenzelle -->
 	
 	<xsl:choose>
 		<xsl:when test="@Bezeichnung != ''">
@@ -162,8 +183,8 @@
 	<br />
 </xsl:template>
 
-<xsl:template match="info[@class='AX_LagebezeichnungMitHausnummer']" mode="html">
-	<!-- Ausgabe der Infos eines AX_LagebezeichnungMitHausnummer innerhalb einer
+<xsl:template match="info[@class='AX_LagebezeichnungMitHausnummer']" mode="html_compact">
+	<!-- Ausgabe der Infos eines AX_LagebezeichnungMitHausnummer als Teil einer
 		 HTML Tabellenzelle -->
 	
 	<xsl:choose>
@@ -180,24 +201,24 @@
 </xsl:template>
 
 
-<xsl:template match="info[@class='AX_Buchungsstelle']" mode="html">
+<xsl:template match="info[@class='AX_Buchungsstelle']" mode="html_compact">
 	<!-- Ausgabe der Infos einer AX_Buchungsstelle und referenziertem 
-	     AX_Buchungsblattblatt innerhalb einer HTML Tabellenzelle -->
+	     AX_Buchungsblattblatt als Teil einer HTML Tabellenzelle -->
 
 	<!-- Ausgabe laufende Nummer der übergeordneten Buchungsstelle -->
 	<xsl:value-of select="@laufendeNummer"/>
 	
 	<!-- Ausgabe Kennzeichen + Blattart des Buchungsblatt -->
 	<xsl:text> - </xsl:text>
-	<xsl:apply-templates select="info[@class='AX_Buchungsblatt']" mode="html"/>
+	<xsl:apply-templates select="info[@class='AX_Buchungsblatt']" mode="html_compact"/>
 
 	<!-- Ausgabe Zeilenumbruch -->
 	<br />        
 
 </xsl:template>
 
-<xsl:template match="info[@class='AX_Buchungsblatt']" mode="html">
-	<!-- Ausgabe der Infos eines AX_Buchungsblatt innerhalb einer HTML 
+<xsl:template match="info[@class='AX_Buchungsblatt']" mode="html_compact">
+	<!-- Ausgabe der Infos eines AX_Buchungsblatt als Teil einer HTML 
 		 Tabellenzelle -->
 
 	<!-- Ausgabe Kennzeichen + Blattart des Buchungsblatt -->
@@ -207,8 +228,11 @@
 	
 </xsl:template>
 
-<xsl:template match="info[@class='AX_Person']" mode="html">
-	<!-- Ausgabe der Infos einer AX_Person mit AX_Anschrift und AX_Namensnummer -->
+<xsl:template match="info[@class='AX_Person']" mode="html_compact">
+	<!-- Ausgabe der Infos einer AX_Person mit AX_Anschrift und AX_Namensnummer 
+		 als Teil einer HTML Tabellenzelle 
+		 Annahme: info[AX_Person] ist Kind innerhalb eines info[AX_Flurstueck]
+		          Baumes -->
 	
 	<!--  Ausgabe Attribute Namensnumer -->
 	<xsl:value-of select="../@laufendeNummer"/>
@@ -223,14 +247,14 @@
 	
 	<!-- Ausgabe der zugehörigen Anschriften -->
 	<xsl:text> - </xsl:text>
-	<xsl:apply-templates select="info[@class='AX_Anschrift']" mode="html"/>
+	<xsl:apply-templates select="info[@class='AX_Anschrift']" mode="html_compact"/>
 	
 	<!-- Ausgabe Zeilenumbruch -->
 	<br />        
 
 </xsl:template>
 
-<xsl:template match="info[@class='AX_Anschrift']" mode="html">
+<xsl:template match="info[@class='AX_Anschrift']" mode="html_compact">
 	<!-- Ausgabe der Infos einer AX_Anschrift -->
 	
 	<!-- Ermittlung der zugehörigen Anschriften -->

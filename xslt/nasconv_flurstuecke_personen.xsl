@@ -102,7 +102,11 @@
 
 	<!-- HTML Ausgabe anstossen, Person, die vom Flurstück über das 
 		 Grundbuchblatt referenziert wird, eine Tabellenzeile -->
-	<xsl:apply-templates select="$flst_info//info[@class='AX_Person']" mode="html"/>
+	<xsl:apply-templates select="$flst_info//info[@class='AX_Person']" mode="html">
+		<!-- Sortierung der Personen / Eigentümer eines Flurstückes 
+			 entsprechend der Namensnummer -->
+		<xsl:sort  select="../@laufendeNummer"></xsl:sort>
+	</xsl:apply-templates>
 	
 	
 </xsl:template>

@@ -298,12 +298,35 @@
 		<xsl:attribute name="laufendeNummer">
 			<xsl:value-of select="adv:laufendeNummerNachDIN1421"/>
 		</xsl:attribute>
+		<xsl:attribute name="Nummer">
+			<xsl:value-of select="adv:nummer"/>
+		</xsl:attribute>
+		<xsl:if test="adv:anteil">
+			<xsl:attribute name="Anteil">
+				<xsl:apply-templates select="adv:anteil/adv:AX_Anteil" mode="info"/>
+			</xsl:attribute>
+			<xsl:attribute name="AnteilZaehler">
+				<xsl:apply-templates select="adv:anteil/adv:AX_Anteil/adv:zaehler" mode="info"/>
+			</xsl:attribute>
+			<xsl:attribute name="AnteilNenner">
+				<xsl:apply-templates select="adv:anteil/adv:AX_Anteil/adv:nenner" mode="info"/>
+			</xsl:attribute>
+		</xsl:if>
 
 		<!-- Ermittlung referenzierter Person -->
 		<xsl:apply-templates select="key('person', adv:benennt/@xlink:href)" mode="info"/>
 	</info>
 	
 </xsl:template>
+
+<xsl:template match="adv:AX_Anteil" mode="info">
+	<!-- Ermittelt für Infobaum Bruchstrichdarstellung des AX_Anteil  -->
+		 
+	<xsl:value-of select="concat(substring-before(adv:zaehler, '.'), ' / ', 
+								 substring-before(adv:nenner, '.'))"/>
+</xsl:template>
+
+
 
 <xsl:template match="adv:AX_Person" mode="info">
 	<!-- Infobaum einer AX_Person erstellen incl. durch Join 'hat' 

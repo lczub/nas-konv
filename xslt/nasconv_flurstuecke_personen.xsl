@@ -79,7 +79,9 @@
 		<th>Buchungsstelle laufende Nr</th>
 		<th>Buchungsblatt Kennzeichen</th>
 		<th>Buchungsblatt Art</th>
-		<th>Namensnummer</th>
+		<th>Namensnummer laufende Nr</th>
+		<th>Namensnummer Nummer</th>
+		<th>Namensnummer Anteil</th>
 		<th>Name / Firma</th>
 		<th>Vorname</th>
 		<th>Geburtsdatum</th>
@@ -155,6 +157,8 @@
 		 Tabellenzeile -->
 	
 	<td><xsl:value-of select="@laufendeNummer"/></td>
+	<td><xsl:value-of select="@Nummer"/></td>
+	<td><xsl:value-of select="@Anteil"/></td>
 
 </xsl:template>
 

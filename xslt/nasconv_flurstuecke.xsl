@@ -132,7 +132,7 @@
         
 		<!-- HTML Ausgabe des Buchungsblatt in einer Tabellenzelle anstossen -->
 		<td><xsl:apply-templates select="info[@class='AX_Buchungsstelle']" mode="html_compact"/></td>
-		<!-- HTML Ausgabe der Personendaten in einer Tabellenzelle anstossen -->
+		<!-- HTML Ausgabe aller Personendaten in einer Tabellenzelle -->
         <td><xsl:apply-templates select=".//info[@class='AX_Person']" mode="html_compact"/></td>
 	</tr>
 </xsl:template>

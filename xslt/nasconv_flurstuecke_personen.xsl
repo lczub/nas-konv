@@ -69,15 +69,23 @@
 	<!-- Definition der Tabelle zur Ausgabe von Flurstuecken und Personen -->
 	
 	<tr bgcolor="#9acd32">
-		<th>Gemarkung</th><th>Gemarkungsname</th><th>Flur</th>
-		<th>Flst-Nr</th><th>Kennzeichen</th>
+		<th>Gemarkung Kennzeichen</th><th>Gemarkung Name</th><th>Flur</th>
+		<th>Flurstück Nummer</th><th>Flurstück Kennzeichen</th>
 		<th>amtliche Fläche</th>
-		<th>Gemeinde</th>
-		<th>Gemeindename</th>
+		<th>Gemeinde Kennzeichen</th>
+		<th>Gemeinde Name</th>
 		<th>Lagebezeichnung</th>
 		<th>Lagebez. mit Hsnr</th>
-		<th>Buchungsstelle u. -blatt</th>
-		<th>Personen</th>
+		<th>Buchungsstelle laufende Nr</th>
+		<th>Buchungsblatt Kennzeichen</th>
+		<th>Buchungsblatt Art</th>
+		<th>Namensnummer</th>
+		<th>Name / Firma</th>
+		<th>Vorname</th>
+		<th>Geburtsdatum</th>
+		<th>Strasse Hsnr</th>
+		<th>PLZ</th>
+		<th>Ort</th>
 	</tr>
 		
 </xsl:template>
@@ -114,12 +122,64 @@
 		<!-- Ausgabe HTML Zellen mit Lagebezeichnungen zum Flurstücks -->
 		<xsl:apply-templates select="../../../.." mode="html_cells_lage"/>
         
-		<!-- HTML Ausgabe des Buchungsblatt in einer Tabellenzelle anstossen -->
-		<td><xsl:apply-templates select="../../.." mode="html_compact"/></td>
-		<!-- HTML Ausgabe der Personendaten in einer Tabellenzelle anstossen -->
-        <td><xsl:apply-templates select="." mode="html_compact"/></td>
+		<!-- Ausgabe HTML Zellen zur Buchungsstelle der Person -->
+		<xsl:apply-templates select="../../.." mode="html_cells"/>
+		<!-- Ausgabe HTML Zellen zum Buchungsblatt der Person -->
+		<xsl:apply-templates select="../.." mode="html_cells"/>
+		<!-- Ausgabe HTML Zellen mit Namensnummern zur Person -->
+        <xsl:apply-templates select=".." mode="html_cells"/>
+		<!-- Ausgabe HTML Zellen mit generellen Personeninformationen -->
+        <xsl:apply-templates select="." mode="html_cells"/>
+		<!-- Ausgabe HTML Zellen mit Ansschrift zur Person -->
+        <xsl:apply-templates select="info[@class='AX_Anschrift']" mode="html_cells"/>
 	</tr>
          		  
+</xsl:template>
+
+<xsl:template match="info[@class='AX_Person']" mode="html_cells">
+	<!-- Ausgabe der Infos einer AX_Person als Zellen einer HTML Tabellenzeile -->
+	
+	<td><xsl:value-of select="@NachnameOderFirma"/></td>
+	<td><xsl:value-of select="@Vorname"/></td>
+	<td><xsl:value-of select="@Geburtsdatum"/></td>
+
+</xsl:template>
+
+
+<xsl:template match="info[@class='AX_Namensnummer']" mode="html_cells">
+	<!-- Ausgabe der Infos einer AX_Namensnummer als Zellen einer HTML 
+		 Tabellenzeile -->
+	
+	<td><xsl:value-of select="@laufendeNummer"/></td>
+
+</xsl:template>
+
+<xsl:template match="info[@class='AX_Anschrift']" mode="html_cells">
+	<!-- Ausgabe der Infos einer AX_Anschrift als Zellen einer 
+		 HTML Tabellenzeile -->
+	
+	<td><xsl:value-of select="@Strasse"/><xsl:text> </xsl:text><xsl:value-of select="@Hausnummer"/></td>
+	<td><xsl:value-of select="@PostleitzahlPostzustellung"/></td>
+	<td><xsl:value-of select="@Ort_Post"/></td>
+
+</xsl:template>
+
+<xsl:template match="info[@class='AX_Buchungsblatt']" mode="html_cells">
+	<!-- Ausgabe der Infos eines AX_Buchungsblatt als Zellen einer 
+		 HTML Tabellenzeile -->
+
+	<td><xsl:value-of select="@Blattkennzeichen"/></td>
+	<td><xsl:value-of select="@Blattart"/></td>
+	
+</xsl:template>
+
+
+<xsl:template match="info[@class='AX_Buchungsstelle']" mode="html_cells">
+	<!-- Ausgabe der Infos einer AX_Buchungsstelle als Zellen einer 
+		 HTML Tabellenzeile -->
+
+	<td><xsl:value-of select="@laufendeNummer"/></td>
+
 </xsl:template>
 
 </xsl:stylesheet>

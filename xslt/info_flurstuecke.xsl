@@ -250,9 +250,26 @@
 			<xsl:value-of select="local-name()"/>
 		</xsl:attribute>
 
+        <xsl:attribute name="Buchungsart">
+        	<xsl:value-of select="adv:buchungsart"/>
+        </xsl:attribute>
         <xsl:attribute name="laufendeNummer">
         	<xsl:value-of select="adv:laufendeNummer"/>
         </xsl:attribute>
+		<xsl:if test="adv:anteil">
+			<xsl:attribute name="Anteil">
+				<xsl:apply-templates select="adv:anteil/adv:AX_Anteil" mode="info"/>
+			</xsl:attribute>
+			<xsl:attribute name="AnteilZaehler">
+				<xsl:apply-templates select="adv:anteil/adv:AX_Anteil/adv:zaehler" mode="info"/>
+			</xsl:attribute>
+			<xsl:attribute name="AnteilNenner">
+				<xsl:apply-templates select="adv:anteil/adv:AX_Anteil/adv:nenner" mode="info"/>
+			</xsl:attribute>
+			<xsl:attribute name="NrAufteilungsplan">
+				<xsl:apply-templates select="adv:nummerImAufteilungsplan" mode="info"/>
+			</xsl:attribute>
+		</xsl:if>
 	
 		<!-- Ermittlung des referenzierten AX_Buchungsblatt -->
 		<xsl:variable name="blatt" select="key('buchungsblatt', adv:istBestandteilVon/@xlink:href)"/>

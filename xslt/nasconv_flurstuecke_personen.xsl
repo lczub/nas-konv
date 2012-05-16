@@ -76,11 +76,11 @@
 		<th>Gemeinde Name</th>
 		<th>Lagebezeichnung</th>
 		<th>Lagebez. mit Hsnr</th>
+		<th>Buchungsstelle Buchungsart</th>
 		<th>Buchungsstelle laufende Nr</th>
 		<th>Buchungsblatt Kennzeichen</th>
-		<th>Buchungsblatt Art</th>
+		<th>Buchungsblatt Blattart</th>
 		<th>Namensnummer laufende Nr</th>
-		<th>Namensnummer Nummer</th>
 		<th>Namensnummer Anteil</th>
 		<th>Name / Firma</th>
 		<th>Vorname</th>
@@ -157,7 +157,6 @@
 		 Tabellenzeile -->
 	
 	<td><xsl:value-of select="@laufendeNummer"/></td>
-	<td><xsl:value-of select="@Nummer"/></td>
 	<td><xsl:value-of select="@Anteil"/></td>
 
 </xsl:template>
@@ -186,6 +185,7 @@
 	<!-- Ausgabe der Infos einer AX_Buchungsstelle als Zellen einer 
 		 HTML Tabellenzeile -->
 
+	<td><xsl:value-of select="@Buchungsart"/></td>
 	<td><xsl:value-of select="@laufendeNummer"/></td>
 
 </xsl:template>

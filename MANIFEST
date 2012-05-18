@@ -1,5 +1,5 @@
 ﻿*.xml
 xslt\*.xsl
 LICENSE.txt
-README
-*\README
+README.md
+*\README.md

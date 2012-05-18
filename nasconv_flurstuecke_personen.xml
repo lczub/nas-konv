@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ********************************************************************
+	 This file is part of NAS-KONV, a collection of examples, how 
+	 informations could be extracted from NAS files (ALKIS data).
+     ******************************************************************** --> 
+	 
+<!-- ********************************************************************
+	 The MIT License (MIT)
+
+	 Copyright (c) 2012 Luiko Czub
+
+	 Permission is hereby granted, free of charge, to any person 
+	 obtaining a copy of this software and associated documentation 
+	 files (the "Software"), to deal in the Software without restriction,
+	 including without limitation the rights to use, copy, modify, merge,
+	 publish, distribute, sublicense, and/or sell copies of the Software,
+	 and to permit persons to whom the Software is furnished to do so, 
+	 subject to the following conditions:
+
+	 The above copyright notice and this permission notice shall be 
+	 included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+	 EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+	 MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+	 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+	 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+	 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+	 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+     ******************************************************************** --> 
+
+<!-- ******************************************************************** 
+	 Das Öffnen dieser XML Datei in einem Web Browser (Firefox / IE) 
+	 bewirkt, dass aus den im Block <nas_files> aufgeführten NAS Dateien 
+	 Informationen extrahiert werden. 
+	 Die Regeln, welche Informationen extrahiert werden sollen, sind in 
+	 der in XML-STYLESHEET referenzierte XSL Datei definiert.
+	 ******************************************************************** -->
+	 
+<!-- ******************************************************************** 
+	 Dieses NAS-KONV Beispiel erstellt eine HMTL-Seite mit Informationen 
+	 zu Flurstücken.
+	 ******************************************************************** -->	 
+
+<!-- ******************************************************************** 
+	 Das Öffnen dieser XML Datei in einem Web Browser bewirkt, dass aus 
+	 den im Block <nas_files> aufgeführten NAS Dateien Informationen 
+	 extrahiert und als HTML Seite präsentiert werden. 
+	 
+	 Die Regeln, welche Informationen extrahiert werden sollen, sind in 
+	 der durch XML-STYLESHEET referenzierten Datei nasconv_THEMA_exsl.xsl 
+	 definiert.
+	 
+	 nasconv_THEMA_exsl.xsl nutzt die proprietäre XSLT 1.0 Erweiterung 
+	 exsl:node-set(), die nur von Web Browsern verarbeitet werden kann, 
+	 die Gecko als XSL Parser Gecko einsetzen (z.B. Firefox).
+	 
+	 Soll ein abweichender Web Browser verwendet werden (z.B. IE), muss
+	 ein analoges Stylesheet (z.B. nasconv_THEMA_msxsl.xsl) definiert und 
+	 referenziert werden, dass eine entprechende proprietäre XSLT 1.0 
+	 Erweiterung (zB. msxl:node-set()) nutzt.
+	 
+	 Weitere Alternativ - gleich über einen XSLT 2.0 Parser konvertieren.
+	 Siehe auch NASKONV Ticket 1 - https://github.com/lczub/nas-konv/issues/1
+	 ******************************************************************** -->
+<?xml-stylesheet type="text/xsl" href="xslt/nasconv_flurstuecke_personen_exsl.xsl"?>
+
+
+<nas_files>
+	<!-- Liste der NAS Dateien, deren Informationen extrahiert werden. 
+         Sie werden im Unterverzeichnis ./data gesucht 
+		 Die Liste kann individuell angepasst werden -->	
+		 
+	<!-- auskommentierte Musterdaten , die nicht GeoInfoDok 6.0.0 referenzieren
+	<nas_file name="data/091119-ALKIS_NAS_Beispieldaten_BB.xml"/>	
+	<nas_file name="data/ALKIS-Beispieldaten.xml"/>
+	<nas_file name="data/653365.xml"/> 
+	<nas_file name="data/ALKIS_NBA_Beispieldaten_Erstabgabe_BB.xml"/>
+	-->
+	<!-- Musterdaten , die die GeoInfoDok 6.0.0 referenzieren -->
+	<nas_file name="data/ALKIS-Beispieldaten-SH-Seth-alles.xml"/>
+	<nas_file name="data/ALKIS-Beispieldaten-SH-Glueckstadt-Punkte.xml"/>
+	<nas_file name="data/lurchingen_0.4.xml"/>
+ 	<nas_file name="data/20090106_ALKIS_doeteberg.xml"/>	
+	<nas_file name="data/NBA-Mustermonzel_20100520T144438_2von8_32350000_5525000.xml"/>
+	<nas_file name="data/NBA-Mustermonzel_20100520T144438_4von8_32350000_5530000.xml"/>
+ 	<nas_file name="data/Bestandsdatenauszug.xml"/>
+
+</nas_files>

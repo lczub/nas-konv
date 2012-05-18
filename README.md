@@ -52,17 +52,7 @@ Soll eine XSLT 2.0 Konvertierungen angewendet werden, muss ein externer XSLT 2.0
 
     java -jar saxon9he.jar -s:nasconv_flurstuecke.xml -xsl:xslt/nasconv_flurstuecke-gruppiert.xsl -o:nasconv_flurstuecke-gruppiert.html
 
-#### Aktuell bereitgestellte XSLT 1.0 Konvertierungen ####
-
-* nasconv_aufnahmepunkte:
-  Liste der AX_Aufnahmepunkt und ihnen zugeordneter AX_PunktortAU Datensätze
-* nasconv_flurstuecke:
-  Liste der AX_Flurstück und ihnen zugeordneter AX_Buchungsblatt und AX_Person Datensätze
-  
-#### Aktuell bereitgestellte XSLT 2.0 Konvertierungen ####
-
-* nasconv_flurstuecke_gruppiert:
-  Liste der AX_Flurstück und ihnen zugeordneter AX_Buchungsblatt und AX_Person Datensätze, gruppiert nach Gemarkung - Flur in separaten Tabellen.
+Eine Auflistung der aktuell bereitgestellten XSLT Konvertierungen findet sich in [xslt\README]
 
 fachliche Informationen
 ------------------------
@@ -93,6 +83,7 @@ haben. Falls nicht, siehe <http://opensource.org/licenses/MIT>.
 [W3Schools Online Web Tutorial]: http://www.w3schools.com
 [XSLT Tutorial]: http://www.w3schools.com/xsl/default.asp
 [data\README]: https://github.com/lczub/nas-konv/blob/master/data/README.md
+[xslt\README]: https://github.com/lczub/nas-konv/blob/master/xslt/README.md
 [Sourceforge Projekt NAS-KONV]: http://sourceforge.net/projects/naskonv
 [GitHub NAS-KONV Repository]: https://github.com/lczub/nas-konv
 [GitHub NAS-KONV Tickets]: https://github.com/lczub/nas-konv/issues
